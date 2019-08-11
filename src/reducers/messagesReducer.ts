@@ -2,7 +2,7 @@ import { TMessage } from '../type-declarations/MessageType';
 
 type MessagesReducerState = TMessage[];
 
-interface MessagesReducerAction {
+export interface MessagesReducerAction {
   type: 'POPULATE_MESSAGES' | 'ADD_MESSAGE' | 'REMOVE_MESSAGE';
   messages: TMessage[];
 }

@@ -1,10 +1,8 @@
-import React, { FormEvent, useState, ChangeEvent } from 'react';
+import React, { FormEvent, useState, useContext, ChangeEvent } from 'react';
+import { context } from '../context/context';
 
-type TMessageInputProps = {
-  saveMessage: (e: FormEvent, title: string, body: string) => boolean;
-};
-
-const MessageInput = ({ saveMessage }: TMessageInputProps) => {
+const MessageInput = () => {
+  const { messages } = useContext(context);
   const [title, setTitle] = useState<string>('');
   const [body, setBody] = useState<string>('');
 
@@ -13,6 +11,31 @@ const MessageInput = ({ saveMessage }: TMessageInputProps) => {
 
   const changeBody = (e: ChangeEvent<HTMLTextAreaElement>) =>
     setBody(e.target.value || '');
+
+  const saveMessage = (e: FormEvent, title: string, body: string): boolean => {
+    e.preventDefault();
+
+    // Generate messageID
+    const messageID = Math.floor(Math.random() * 10000).toString();
+
+    // Add message
+    if (
+      typeof title === 'string' &&
+      title.length > 0 &&
+      typeof body === 'string' &&
+      body.length > 0
+    ) {
+      messages.dispatch &&
+        messages.dispatch({
+          type: 'ADD_MESSAGE',
+          messages: [{ title, body, messageID }]
+        });
+      return true;
+    } else {
+      alert('Title and Body of message cannot be empty');
+      return false;
+    }
+  };
 
   return (
     <form
